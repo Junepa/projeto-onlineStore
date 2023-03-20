@@ -8,7 +8,7 @@ class Lista extends Component {
     redirect: false,
     categories: [],
     products: [],
-    checked: false,
+    message: '',
   };
 
   async componentDidMount() {
@@ -30,9 +30,15 @@ class Lista extends Component {
     const { searchValue } = this.state;
     // const { value } = target;
     const getProductByName = await getProductsFromCategoryAndQuery('', searchValue);
+    if (getProductByName.results.length === 0) {
+      this.setState({
+        message: 'Nenhum produto foi encontrado',
+      });
+    }
     this.setState({
       products: getProductByName.results,
     });
+    console.log(getProductByName);
   };
 
   // handleRadioButtons = async () => {
@@ -48,7 +54,7 @@ class Lista extends Component {
   // buttonClick = () => Redirect('/Carrinho');
 
   render() {
-    const { searchValue, redirect, categories, products } = this.state;
+    const { searchValue, redirect, categories, products, message } = this.state;
     if (redirect) return <Redirect to="/Carrinho" />;
 
     return (
@@ -101,7 +107,7 @@ class Lista extends Component {
           </li>
           // thumbnail, title e price
         ))}
-
+        <p>{ message }</p>
       </div>
     );
   }
