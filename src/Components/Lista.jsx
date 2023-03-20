@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+import { getCategories } from '../services/api';
 
 class Lista extends Component {
   state = {
     searchValue: '',
     redirect: false,
+    categories: [],
   };
+
+  async componentDidMount() {
+    const result = await getCategories();
+    this.setState({
+      categories: result,
+    });
+  }
 
   handleChange = ({ target }) => {
     const { value } = target;
@@ -24,7 +33,7 @@ class Lista extends Component {
   // buttonClick = () => Redirect('/Carrinho');
 
   render() {
-    const { searchValue, redirect } = this.state;
+    const { searchValue, redirect, categories } = this.state;
 
     if (redirect) return <Redirect to="/Carrinho" />;
 
@@ -47,6 +56,11 @@ class Lista extends Component {
           {!searchValue
             ? 'Digite algum termo de pesquisa ou escolha uma categoria.' : ''}
         </p>
+        {categories.map((category) => (
+          <label data-testid="category" key={ category.id }>
+            {category.name}
+            <input type="radio" />
+          </label>))}
 
       </div>
     );
