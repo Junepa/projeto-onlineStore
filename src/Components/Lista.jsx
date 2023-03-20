@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import {
   getCategories,
-  getProductsFromCategoryAndQuery,
   getProductsFromQuery,
   getProductsFromCategory,
 } from '../services/api';
@@ -14,6 +13,7 @@ class Lista extends Component {
     categories: [],
     products: [],
     message: '',
+    productsByCategory: [],
   };
 
   async componentDidMount() {
@@ -21,9 +21,6 @@ class Lista extends Component {
     this.setState({
       categories: result,
     });
-    await getProductsFromCategory();
-    await getProductsFromQuery();
-    await getProductsFromCategoryAndQuery();
     console.log(result);
   }
 
@@ -36,7 +33,6 @@ class Lista extends Component {
 
   handleClickSearch = async () => {
     const { searchValue } = this.state;
-    // const { value } = target;
     const getProductByName = await getProductsFromQuery(searchValue);
     if (getProductByName.results.length === 0) {
       this.setState({
@@ -50,7 +46,11 @@ class Lista extends Component {
 
   handleRadioButtons = async ({ target }) => {
     const { value } = target;
-    const getProducts = await getProductsFromCategory(value);
+    const getProductsByCat = await getProductsFromCategory(value);
+    this.setState({
+      productsByCategory: getProductsByCat.results,
+    });
+    console.log(getProductsByCat.results);
   };
 
   handleChangeBtn = () => {
@@ -62,7 +62,15 @@ class Lista extends Component {
   // buttonClick = () => Redirect('/Carrinho');
 
   render() {
-    const { searchValue, redirect, categories, products, message } = this.state;
+    const {
+      searchValue,
+      redirect,
+      categories,
+      products,
+      message,
+      productsByCategory,
+    } = this.state;
+
     if (redirect) return <Redirect to="/Carrinho" />;
 
     return (
@@ -102,6 +110,7 @@ class Lista extends Component {
             <input
               type="radio"
               value={ category.id }
+              name="obrigadoMoises"
               onClick={ this.handleRadioButtons }
             />
             {category.name}
@@ -118,6 +127,17 @@ class Lista extends Component {
             <img src={ product.thumbnail } alt={ product.title } />
           </li>
           // thumbnail, title e price
+        ))}
+        {productsByCategory.map((product) => (
+          <li key={ product.id } data-testid="product">
+            <h2>
+              {product.title}
+            </h2>
+            <p>
+              {product.price}
+            </p>
+            <img src={ product.thumbnail } alt={ product.title } />
+          </li>
         ))}
         <p>{ message }</p>
       </div>
