@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
-import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+import {
+  getCategories,
+  getProductsFromCategoryAndQuery,
+  getProductsFromQuery,
+  getProductsFromCategory,
+} from '../services/api';
 
 class Lista extends Component {
   state = {
@@ -16,7 +21,10 @@ class Lista extends Component {
     this.setState({
       categories: result,
     });
+    await getProductsFromCategory();
+    await getProductsFromQuery();
     await getProductsFromCategoryAndQuery();
+    console.log(result);
   }
 
   handleChange = async ({ target }) => {
@@ -29,7 +37,7 @@ class Lista extends Component {
   handleClickSearch = async () => {
     const { searchValue } = this.state;
     // const { value } = target;
-    const getProductByName = await getProductsFromCategoryAndQuery('', searchValue);
+    const getProductByName = await getProductsFromQuery(searchValue);
     if (getProductByName.results.length === 0) {
       this.setState({
         message: 'Nenhum produto foi encontrado',
@@ -38,12 +46,12 @@ class Lista extends Component {
     this.setState({
       products: getProductByName.results,
     });
-    console.log(getProductByName);
   };
 
-  // handleRadioButtons = async () => {
-  //   const getProducts = await getProductsFromCategoryAndQuery(value, checked.value);
-  // };
+  handleRadioButtons = async ({ target }) => {
+    const { value } = target;
+    const getProducts = await getProductsFromCategory(value);
+  };
 
   handleChangeBtn = () => {
     this.setState({
@@ -91,7 +99,11 @@ class Lista extends Component {
         </p>
         {categories.map((category) => (
           <label data-testid="category" key={ category.id }>
-            <input type="radio" value={ category.name } />
+            <input
+              type="radio"
+              value={ category.id }
+              onClick={ this.handleRadioButtons }
+            />
             {category.name}
           </label>))}
 
