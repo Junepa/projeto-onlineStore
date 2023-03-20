@@ -7,6 +7,8 @@ class Lista extends Component {
     searchValue: '',
     redirect: false,
     categories: [],
+    products: [],
+    checked: false,
   };
 
   async componentDidMount() {
@@ -18,13 +20,25 @@ class Lista extends Component {
   }
 
   handleChange = async ({ target }) => {
-    const { value, checked } = target;
-    const getProducts = await getProductsFromCategoryAndQuery(value, checked.value);
-    console.log(getProducts);
+    const { value } = target;
     this.setState({
       searchValue: value,
     });
   };
+
+  handleClickSearch = async () => {
+    const { searchValue } = this.state;
+    // const { value } = target;
+    const getProductByName = await getProductsFromCategoryAndQuery('', searchValue);
+    this.setState({
+      products: getProductByName.result,
+    });
+    console.log(getProductByName);
+  };
+
+  // handleRadioButtons = async () => {
+  //   const getProducts = await getProductsFromCategoryAndQuery(value, checked.value);
+  // };
 
   handleChangeBtn = () => {
     this.setState({
@@ -35,7 +49,7 @@ class Lista extends Component {
   // buttonClick = () => Redirect('/Carrinho');
 
   render() {
-    const { searchValue, redirect, categories } = this.state;
+    const { searchValue, redirect, categories, products } = this.state;
 
     if (redirect) return <Redirect to="/Carrinho" />;
 
@@ -52,7 +66,7 @@ class Lista extends Component {
         <button
           type="button"
           data-testid="query-button"
-          onClick={ this.handleChange }
+          onClick={ this.handleClickSearch }
         >
           Search
 
@@ -73,9 +87,16 @@ class Lista extends Component {
         </p>
         {categories.map((category) => (
           <label data-testid="category" key={ category.id }>
-            <input type="radio" />
+            <input type="radio" value={ category.name } />
             {category.name}
           </label>))}
+
+        {products.map((product) => (
+          <li key={ product.id }>
+            <p>{product.title}</p>
+          </li>
+          // thumbnail, title e price
+        ))}
 
       </div>
     );
