@@ -31,9 +31,8 @@ class Lista extends Component {
     // const { value } = target;
     const getProductByName = await getProductsFromCategoryAndQuery('', searchValue);
     this.setState({
-      products: getProductByName.result,
+      products: getProductByName.results,
     });
-    console.log(getProductByName);
   };
 
   // handleRadioButtons = async () => {
@@ -50,7 +49,6 @@ class Lista extends Component {
 
   render() {
     const { searchValue, redirect, categories, products } = this.state;
-
     if (redirect) return <Redirect to="/Carrinho" />;
 
     return (
@@ -92,8 +90,14 @@ class Lista extends Component {
           </label>))}
 
         {products.map((product) => (
-          <li key={ product.id }>
-            <p>{product.title}</p>
+          <li key={ product.id } data-testid="product">
+            <h2>
+              {product.title}
+            </h2>
+            <p>
+              {product.price}
+            </p>
+            <img src={ product.thumbnail } alt={ product.title } />
           </li>
           // thumbnail, title e price
         ))}
