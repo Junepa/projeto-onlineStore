@@ -58,8 +58,8 @@ class Lista extends Component {
         </p>
         {categories.map((category) => (
           <label data-testid="category" key={ category.id }>
-            {category.name}
             <input type="radio" />
+            {category.name}
           </label>))}
 
       </div>
