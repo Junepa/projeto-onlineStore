@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
-import { getCategories } from '../services/api';
+import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 
 class Lista extends Component {
   state = {
@@ -14,11 +14,13 @@ class Lista extends Component {
     this.setState({
       categories: result,
     });
+    await getProductsFromCategoryAndQuery();
   }
 
-  handleChange = ({ target }) => {
-    const { value } = target;
-
+  handleChange = async ({ target }) => {
+    const { value, checked } = target;
+    const getProducts = await getProductsFromCategoryAndQuery(value, checked.value);
+    console.log(getProducts);
     this.setState({
       searchValue: value,
     });
@@ -40,8 +42,21 @@ class Lista extends Component {
     return (
       <div>
         <label>
-          <input type="search" value={ searchValue } onChange={ this.handleChange } />
+          <input
+            type="search"
+            value={ searchValue }
+            onChange={ this.handleChange }
+            data-testid="query-input"
+          />
         </label>
+        <button
+          type="button"
+          data-testid="query-button"
+          onClick={ this.handleChange }
+        >
+          Search
+
+        </button>
 
         <button
           type="button"
