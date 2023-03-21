@@ -12,22 +12,25 @@ class Descricao extends Component {
     const { match: { params: { id } } } = this.props;
     console.log(this.props);
     const product = await getProductsFromCategory(id);
-    console.log(product);
     this.setState({
       product,
     });
   }
 
   render() {
-    const { product } = this.state;
-    console.log(product);
+    const { history } = this.props;
+    const { product: { title, thumbnail, price } } = this.state;
     return (
       <div>
-        <li data-testid="product">
-          <h2>{ product.title}</h2>
-          <img src={ product.thumbnail } alt={ product.title } />
-          <h3>{ product.price }</h3>
-        </li>
+        <p data-testid="product-detail-name">{title}</p>
+        <img src={ thumbnail } alt={ title } data-testid="product-detail-image" />
+        <p data-testid="product-detail-price">{ price }</p>
+        <button
+          data-testid="shopping-cart-button"
+          onClick={ () => history.push('/carrinho') }
+        >
+          Comprar
+        </button>
       </div>
     );
   }
@@ -36,10 +39,11 @@ class Descricao extends Component {
 Descricao.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    })
-      .isRequired,
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
   }).isRequired,
 };
-
 export default Descricao;
