@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+import { Redirect, Link } from 'react-router-dom/cjs/react-router-dom.min';
 import {
   getCategories,
   getProductsFromQuery,
@@ -21,7 +21,6 @@ class Lista extends Component {
     this.setState({
       categories: result,
     });
-    console.log(result);
   }
 
   handleChange = async ({ target }) => {
@@ -50,7 +49,6 @@ class Lista extends Component {
     this.setState({
       productsByCategory: getProductsByCat.results,
     });
-    console.log(getProductsByCat.results);
   };
 
   handleChangeBtn = () => {
@@ -129,15 +127,17 @@ class Lista extends Component {
           // thumbnail, title e price
         ))}
         {productsByCategory.map((product) => (
-          <li key={ product.id } data-testid="product">
-            <h2>
-              {product.title}
-            </h2>
-            <p>
-              {product.price}
-            </p>
-            <img src={ product.thumbnail } alt={ product.title } />
-          </li>
+          <Link to={ `/descricao/${product.id}` } key={ product.id }>
+            <li key={ product.id } data-testid="product">
+              <h2>
+                {product.title}
+              </h2>
+              <p>
+                {product.price}
+              </p>
+              <img src={ product.thumbnail } alt={ product.title } />
+            </li>
+          </Link>
         ))}
         <p>{ message }</p>
       </div>
