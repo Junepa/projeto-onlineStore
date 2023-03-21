@@ -57,7 +57,9 @@ class Lista extends Component {
     });
   };
 
-  // buttonClick = () => Redirect('/Carrinho');
+  //   addCart = () => {
+  // // adicionar a lógica que adiciona o produto no carrinho!
+  //   };
 
   render() {
     const {
@@ -129,6 +131,13 @@ class Lista extends Component {
               </p>
               <img src={ product.thumbnail } alt={ product.title } />
             </li>
+            <button
+              data-testid="product-add-to-cart"
+              type="button"
+            >
+              Adicionar ao carrinho
+
+            </button>
           </Link>
           // thumbnail, title e price
         ))}
@@ -147,6 +156,13 @@ class Lista extends Component {
               </p>
               <img src={ product.thumbnail } alt={ product.title } />
             </li>
+            <button
+              data-testid="product-add-to-cart"
+              type="button"
+            >
+              Adicionar ao carrinho
+
+            </button>
           </Link>
         ))}
         <p>{ message }</p>
