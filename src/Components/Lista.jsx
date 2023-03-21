@@ -115,7 +115,11 @@ class Lista extends Component {
           </label>))}
 
         {products.map((product) => (
-          <Link to={ `/descricao/${product.title}` } key={ product.id }>
+          <Link
+            to={ `/descricao/${product.id}` }
+            key={ product.id }
+            data-testid="product-detail-link"
+          >
             <li data-testid="product">
               <h2>
                 {product.title}
@@ -129,7 +133,11 @@ class Lista extends Component {
           // thumbnail, title e price
         ))}
         {productsByCategory.map((product) => (
-          <Link to={ `/descricao/${product.id}` } key={ product.id }>
+          <Link
+            to={ `/descricao/${product.id}` }
+            key={ product.id }
+            data-testid="product-detail-link"
+          >
             <li key={ product.id } data-testid="product">
               <h2>
                 {product.title}

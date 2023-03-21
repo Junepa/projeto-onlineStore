@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getProductsFromCategory } from '../services/api';
+import { getProductsId } from '../services/api';
 
 class Descricao extends Component {
   state = {
-    product: [],
+    product: null,
 
   };
 
   async componentDidMount() {
     const { match: { params: { id } } } = this.props;
     console.log(this.props);
-    const product = await getProductsFromCategory(id);
+    const product = await getProductsId(id);
     this.setState({
       product,
     });
@@ -19,18 +19,29 @@ class Descricao extends Component {
 
   render() {
     const { history } = this.props;
-    const { product: { title, thumbnail, price } } = this.state;
+    const { product } = this.state;
     return (
       <div>
-        <p data-testid="product-detail-name">{title}</p>
-        <img src={ thumbnail } alt={ title } data-testid="product-detail-image" />
-        <p data-testid="product-detail-price">{ price }</p>
-        <button
-          data-testid="shopping-cart-button"
-          onClick={ () => history.push('/carrinho') }
-        >
-          Comprar
-        </button>
+
+        {product === null ? (
+          <p>Careegando...</p>
+        ) : (
+          <>
+            <p data-testid="product-detail-name">{product.title}</p>
+            <img
+              src={ product.thumbnail }
+              alt={ product.title }
+              data-testid="product-detail-image"
+            />
+            <p data-testid="product-detail-price">{ product.price }</p>
+            <button
+              data-testid="shopping-cart-button"
+              onClick={ () => history.push('/carrinho') }
+            >
+              Comprar
+            </button>
+          </>
+        )}
       </div>
     );
   }
