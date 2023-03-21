@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { getProductsFromCategory } from '../services/api';
 
 class Descricao extends Component {
@@ -10,10 +9,12 @@ class Descricao extends Component {
   };
 
   async componentDidMount() {
-    const { id } = this.props;
-    const result = getProductsFromCategory(id);
+    const { match: { params: { id } } } = this.props;
+    console.log(this.props);
+    const product = await getProductsFromCategory(id);
+    console.log(product);
     this.setState({
-      product: result,
+      product,
     });
   }
 
@@ -24,8 +25,8 @@ class Descricao extends Component {
       <div>
         <li data-testid="product">
           <h2>{ product.title}</h2>
-          <img src={ thumbnail } alt={ title } />
-          <h3>{ price }</h3>
+          <img src={ product.thumbnail } alt={ product.title } />
+          <h3>{ product.price }</h3>
         </li>
       </div>
     );
@@ -33,7 +34,12 @@ class Descricao extends Component {
 }
 
 Descricao.propTypes = {
-  id: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    })
+      .isRequired,
+  }).isRequired,
 };
 
 export default Descricao;
