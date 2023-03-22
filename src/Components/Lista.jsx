@@ -56,15 +56,10 @@ class Lista extends Component {
     });
   };
 
-  addCart = ({ target }) => {
-    const { value } = target;
-    const { products } = this.state;
-
+  addCart = (product) => {
     const array = JSON.parse(localStorage.getItem('cart-products')) || [];
 
-    const tamoJuntoDanilo = products.find((product) => product.id === value);
-
-    localStorage.setItem('cart-products', JSON.stringify([...array, tamoJuntoDanilo]));
+    localStorage.setItem('cart-products', JSON.stringify([...array, product]));
   };
 
   // this.setState({
@@ -171,7 +166,7 @@ class Lista extends Component {
               data-testid="product-add-to-cart"
               type="button"
               value={ product.id }
-              onClick={ this.addCart }
+              onClick={ () => this.addCart(product) }
             >
               Adicionar ao carrinho
 
