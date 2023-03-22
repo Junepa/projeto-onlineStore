@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
+import Lista from './Lista';
 
 class Carrinho extends Component {
   state = {
     carrinho: [],
   };
 
+  teste = () => {
+    const { location } = this.props;
+    const { state } = location;
+    const { id } = state;
+    this.setState({
+      carrinho: localStorage.getItem(JSON.parse(id)),
+    });
+    console.log(carrinho);
+  };
+
   render() {
     const { carrinho } = this.state;
-
+    console.log(carrinho);
     return (
       <div>
         <p>Carrinho de Compras</p>

@@ -62,12 +62,21 @@ class Lista extends Component {
     const { value } = target;
     const { products } = this.state;
 
-    products.find((product) => product.id === value);
+    const result = products.find((product) => product.id === value);
+    const { id } = result;
+    localStorage.setItem(id, JSON.stringify(result));
   };
 
   addCartByCategory = ({ target }) => {
     const { value } = target;
     const { productsByCategory } = this.state;
+
+    const result = productsByCategory.find((product) => product.id === value);
+
+    // const newCartProdcuts = [result];
+    const { id } = result;
+
+    localStorage.setItem(id, JSON.stringify(result));
   };
 
   render() {
@@ -81,7 +90,14 @@ class Lista extends Component {
       carrinho,
     } = this.state;
 
-    if (redirect) return <Redirect to="/Carrinho" />;
+    if (redirect) {
+      return (<Redirect
+        to={ {
+          pathname: '/Carrinho',
+          state: { id: products },
+        } }
+      />);
+    }
 
     return (
       <div>
