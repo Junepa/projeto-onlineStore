@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Lista from './Lista';
 
 class Carrinho extends Component {
   state = {
@@ -28,10 +27,22 @@ class Carrinho extends Component {
     return (
       <div>
         <p>Carrinho de Compras</p>
-        <p data-testid="shopping-cart-empty-message">
-          { !carrinho.length ? 'Seu carrinho está vazio' : carrinho}
+        <div data-testid="shopping-cart-empty-message">
+          { !carrinho.length ? 'Seu carrinho está vazio' : carrinho.map((product) => (
+            <div key={ product.id }>
+              <h3 data-testid="shopping-cart-product-name">
+                {product.title}
+              </h3>
+              <span>
+                {product.price}
+              </span>
+              <p data-testid="shopping-cart-product-quantity">
+                {carrinho.length}
+              </p>
+            </div>
+          ))}
 
-        </p>
+        </div>
       </div>
     );
   }

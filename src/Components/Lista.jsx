@@ -91,7 +91,6 @@ class Lista extends Component {
       categories,
       products,
       message,
-      carrinho,
     } = this.state;
 
     if (redirect) {
