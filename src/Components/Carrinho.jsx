@@ -6,18 +6,24 @@ class Carrinho extends Component {
     carrinho: [],
   };
 
-  teste = () => {
-    const { location } = this.props;
-    const { state } = location;
-    const { id } = state;
+  componentDidMount() {
     this.setState({
-      carrinho: localStorage.getItem(JSON.parse(id)),
+      carrinho: JSON.parse(localStorage.getItem('cart-products')) || [],
     });
-    console.log(carrinho);
+  }
+
+  teste = () => {
+    // const { location } = this.props;
+    // const { state } = location;
+    // const { id } = state;
+    // this.setState({
+    //   carrinho: localStorage.getItem(JSON.parse(id)),
+    // });
   };
 
   render() {
     const { carrinho } = this.state;
+    this.teste();
     console.log(carrinho);
     return (
       <div>

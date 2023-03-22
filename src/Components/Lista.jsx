@@ -13,8 +13,6 @@ class Lista extends Component {
     categories: [],
     products: [],
     message: '',
-    productsByCategory: [],
-    carrinho: [],
   };
 
   async componentDidMount() {
@@ -48,7 +46,7 @@ class Lista extends Component {
     const { value } = target;
     const getProductsByCat = await getProductsFromCategory(value);
     this.setState({
-      productsByCategory: getProductsByCat.results,
+      products: getProductsByCat.results,
     });
   };
 
@@ -58,26 +56,38 @@ class Lista extends Component {
     });
   };
 
-  addCartByName = ({ target }) => {
+  addCart = ({ target }) => {
     const { value } = target;
     const { products } = this.state;
 
-    const result = products.find((product) => product.id === value);
-    const { id } = result;
-    localStorage.setItem(id, JSON.stringify(result));
+    const array = JSON.parse(localStorage.getItem('cart-products')) || [];
+
+    const tamoJuntoDanilo = products.find((product) => product.id === value);
+
+    localStorage.setItem('cart-products', JSON.stringify([...array, tamoJuntoDanilo]));
   };
 
-  addCartByCategory = ({ target }) => {
-    const { value } = target;
-    const { productsByCategory } = this.state;
+  // this.setState({
+  //   array: ['rafael'],
+  // });
 
-    const result = productsByCategory.find((product) => product.id === value);
+  // const juju = 'Juliana';
 
-    // const newCartProdcuts = [result];
-    const { id } = result;
+  // this.setState({
+  //   array: [...array, juju],
+  // });
+  // addCartByCategory = ({ target }) => {
+  //   const { value } = target;
+  //   const { productsByCategory } = this.state;
 
-    localStorage.setItem(id, JSON.stringify(result));
-  };
+  //   const array = [];
+
+  //   const result = productsByCategory.find((product) => product.id === value);
+
+  //   array.push(result);
+
+  //   localStorage.setItem('cart-products', JSON.stringify([...array]));
+  // };
 
   render() {
     const {
@@ -86,7 +96,6 @@ class Lista extends Component {
       categories,
       products,
       message,
-      productsByCategory,
       carrinho,
     } = this.state;
 
@@ -143,58 +152,34 @@ class Lista extends Component {
           </label>))}
 
         {products.map((product) => (
-          <Link
-            to={ `/descricao/${product.id}` }
-            key={ product.id }
-            data-testid="product-detail-link"
-          >
-            <li data-testid="product">
-              <h2>
-                {product.title}
-              </h2>
-              <p>
-                {product.price}
-              </p>
-              <img src={ product.thumbnail } alt={ product.title } />
-            </li>
+          <div key={ product.id }>
+            <Link
+              to={ `/descricao/${product.id}` }
+              data-testid="product-detail-link"
+            >
+              <li data-testid="product">
+                <h2>
+                  {product.title}
+                </h2>
+                <p>
+                  {product.price}
+                </p>
+                <img src={ product.thumbnail } alt={ product.title } />
+              </li>
+            </Link>
             <button
               data-testid="product-add-to-cart"
               type="button"
               value={ product.id }
-              onClick={ this.addCartByName }
+              onClick={ this.addCart }
             >
               Adicionar ao carrinho
 
             </button>
-          </Link>
+          </div>
           // thumbnail, title e price
         ))}
-        {productsByCategory.map((product) => (
-          <Link
-            to={ `/descricao/${product.id}` }
-            key={ product.id }
-            data-testid="product-detail-link"
-          >
-            <li key={ product.id } data-testid="product">
-              <h2>
-                {product.title}
-              </h2>
-              <p>
-                {product.price}
-              </p>
-              <img src={ product.thumbnail } alt={ product.title } />
-            </li>
-            <button
-              data-testid="product-add-to-cart"
-              type="button"
-              value={ product.id }
-              onClick={ this.addCartByCategory }
-            >
-              Adicionar ao carrinho
 
-            </button>
-          </Link>
-        ))}
         <p>{ message }</p>
       </div>
     );
