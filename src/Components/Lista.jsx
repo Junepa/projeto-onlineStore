@@ -59,12 +59,12 @@ class Lista extends Component {
   addCart = (product) => {
     const cartText = 'cart-products';
 
-    const array = JSON.parse(localStorage.getItem(cartText)) || [];
+    const productsOnStorage = JSON.parse(localStorage.getItem(cartText)) || [];
 
-    const isOnStorage = array.find((element) => element.id === product.id);
+    const isOnStorage = productsOnStorage.find((element) => element.id === product.id);
 
     if (isOnStorage) {
-      const daniloMusk = array.map((element) => {
+      const daniloMusk = productsOnStorage.map((element) => {
         if (element.id === product.id) {
           return {
             ...element,
@@ -76,11 +76,16 @@ class Lista extends Component {
       });
       localStorage.setItem(cartText, JSON.stringify(daniloMusk));
     } else {
-      localStorage.setItem(cartText, JSON.stringify([...array,
-        { ...product,
+      const updatedList = [
+        ...productsOnStorage,
+        {
+          ...product,
           quantity: 1,
-          date: new Date() },
-      ]));
+          date: new Date(),
+        },
+      ];
+
+      localStorage.setItem(cartText, JSON.stringify(updatedList));
     }
   };
 
