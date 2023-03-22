@@ -37,7 +37,9 @@ class Carrinho extends Component {
                 {product.price}
               </span>
               <p data-testid="shopping-cart-product-quantity">
-                {carrinho.length}
+                {product.quantity}
+                <br />
+                {new Date(product.date).toLocaleDateString()}
               </p>
             </div>
           ))}

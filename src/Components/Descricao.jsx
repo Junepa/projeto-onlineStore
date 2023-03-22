@@ -24,7 +24,7 @@ class Descricao extends Component {
       <div>
 
         {product === null ? (
-          <p>Careegando...</p>
+          <p>Carregando...</p>
         ) : (
           <>
             <p data-testid="product-detail-name">{product.title}</p>
@@ -40,6 +40,7 @@ class Descricao extends Component {
             >
               Comprar
             </button>
+            <button></button>
           </>
         )}
       </div>

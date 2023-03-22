@@ -57,9 +57,31 @@ class Lista extends Component {
   };
 
   addCart = (product) => {
-    const array = JSON.parse(localStorage.getItem('cart-products')) || [];
+    const cartText = 'cart-products';
 
-    localStorage.setItem('cart-products', JSON.stringify([...array, product]));
+    const array = JSON.parse(localStorage.getItem(cartText)) || [];
+
+    const isOnStorage = array.find((element) => element.id === product.id);
+
+    if (isOnStorage) {
+      const daniloMusk = array.map((element) => {
+        if (element.id === product.id) {
+          return {
+            ...element,
+            quantity: element.quantity + 1,
+          };
+        }
+
+        return element;
+      });
+      localStorage.setItem(cartText, JSON.stringify(daniloMusk));
+    } else {
+      localStorage.setItem(cartText, JSON.stringify([...array,
+        { ...product,
+          quantity: 1,
+          date: new Date() },
+      ]));
+    }
   };
 
   // this.setState({
