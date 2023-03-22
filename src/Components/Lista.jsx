@@ -14,6 +14,7 @@ class Lista extends Component {
     products: [],
     message: '',
     productsByCategory: [],
+    carrinho: [],
   };
 
   async componentDidMount() {
@@ -57,9 +58,17 @@ class Lista extends Component {
     });
   };
 
-  //   addCart = () => {
-  // // adicionar a lógica que adiciona o produto no carrinho!
-  //   };
+  addCartByName = ({ target }) => {
+    const { value } = target;
+    const { products } = this.state;
+
+    products.find((product) => product.id === value);
+  };
+
+  addCartByCategory = ({ target }) => {
+    const { value } = target;
+    const { productsByCategory } = this.state;
+  };
 
   render() {
     const {
@@ -69,6 +78,7 @@ class Lista extends Component {
       products,
       message,
       productsByCategory,
+      carrinho,
     } = this.state;
 
     if (redirect) return <Redirect to="/Carrinho" />;
@@ -134,6 +144,8 @@ class Lista extends Component {
             <button
               data-testid="product-add-to-cart"
               type="button"
+              value={ product.id }
+              onClick={ this.addCartByName }
             >
               Adicionar ao carrinho
 
@@ -159,6 +171,8 @@ class Lista extends Component {
             <button
               data-testid="product-add-to-cart"
               type="button"
+              value={ product.id }
+              onClick={ this.addCartByCategory }
             >
               Adicionar ao carrinho
 
