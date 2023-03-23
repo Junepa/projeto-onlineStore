@@ -5,6 +5,7 @@ import {
   getProductsFromQuery,
   getProductsFromCategory,
 } from '../services/api';
+import Product from './Product';
 
 class Lista extends Component {
   state = {
@@ -178,15 +179,12 @@ class Lista extends Component {
               to={ `/descricao/${product.id}` }
               data-testid="product-detail-link"
             >
-              <li data-testid="product">
-                <h2>
-                  {product.title}
-                </h2>
-                <p>
-                  {product.price}
-                </p>
-                <img src={ product.thumbnail } alt={ product.title } />
-              </li>
+              <Product
+                title={ product.title }
+                price={ product.price }
+                thumbnail={ product.thumbnail }
+
+              />
             </Link>
             <button
               data-testid="product-add-to-cart"

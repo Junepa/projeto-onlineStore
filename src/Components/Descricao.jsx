@@ -10,12 +10,44 @@ class Descricao extends Component {
 
   async componentDidMount() {
     const { match: { params: { id } } } = this.props;
-    console.log(this.props);
     const product = await getProductsId(id);
     this.setState({
       product,
     });
   }
+
+  addCart = (product) => {
+    const cartText = 'cart-products';
+
+    const productsOnStorage = JSON.parse(localStorage.getItem(cartText)) || [];
+
+    const isOnStorage = productsOnStorage.find((element) => element.id === product.id);
+
+    if (isOnStorage) {
+      const daniloMusk = productsOnStorage.map((element) => {
+        if (element.id === product.id) {
+          return {
+            ...element,
+            quantity: element.quantity + 1,
+          };
+        }
+
+        return element;
+      });
+      localStorage.setItem(cartText, JSON.stringify(daniloMusk));
+    } else {
+      const updatedList = [
+        ...productsOnStorage,
+        {
+          ...product,
+          quantity: 1,
+          date: new Date(),
+        },
+      ];
+
+      localStorage.setItem(cartText, JSON.stringify(updatedList));
+    }
+  };
 
   render() {
     const { history } = this.props;
@@ -24,7 +56,7 @@ class Descricao extends Component {
       <div>
 
         {product === null ? (
-          <p>Carregando...</p>
+          <p>Careegando...</p>
         ) : (
           <>
             <p data-testid="product-detail-name">{product.title}</p>
@@ -40,7 +72,15 @@ class Descricao extends Component {
             >
               Comprar
             </button>
-            <button></button>
+            <button
+              data-testid="product-detail-add-to-cart"
+              type="button"
+              value={ product.id }
+              onClick={ () => this.addCart(product) }
+            >
+              Adicionar ao carrinho
+
+            </button>
           </>
         )}
       </div>
