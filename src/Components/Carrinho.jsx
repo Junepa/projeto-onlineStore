@@ -6,24 +6,57 @@ class Carrinho extends Component {
   };
 
   componentDidMount() {
+    const storage = this.getSaveProducts();
     this.setState({
-      carrinho: JSON.parse(localStorage.getItem('cart-products')) || [],
+      carrinho: storage,
     });
   }
 
-  teste = () => {
-    // const { location } = this.props;
-    // const { state } = location;
-    // const { id } = state;
-    // this.setState({
-    //   carrinho: localStorage.getItem(JSON.parse(id)),
-    // });
+  getSaveProducts = () => {
+    const cartText = 'cart-products';
+    const storage = JSON.parse(localStorage.getItem(cartText)) || [];
+    return storage;
+  };
+
+  increaseCart = (product) => {
+    const storage = this.getSaveProducts();
+    const isOnStorage = storage.find((element) => element.id === product.id);
+
+    if (isOnStorage) {
+      const daniloMusk = storage.map((element) => {
+        if (element.id === product.id) {
+          return {
+            ...element,
+            quantity: element.quantity + 1,
+          };
+        }
+
+        return element;
+      });
+      localStorage.setItem('cart-products', JSON.stringify(daniloMusk));
+      this.setState({
+        carrinho: daniloMusk,
+      });
+    }
+  };
+
+  decreaseCart = (product) => {
+    this.getSaveProducts();
+  };
+
+  removeCart = (product) => {
+    const cartText = 'cart-products';
+    const productsOnStorage = JSON.parse(localStorage.getItem(cartText)) || [];
+
+    const result = productsOnStorage.filter((storage) => storage.id !== product.id);
+    localStorage.setItem(cartText, JSON.stringify(result));
+    this.setState({
+      carrinho: result,
+    });
   };
 
   render() {
     const { carrinho } = this.state;
-    this.teste();
-    console.log(carrinho);
     return (
       <div>
         <p>Carrinho de Compras</p>
@@ -41,9 +74,34 @@ class Carrinho extends Component {
                 <br />
                 {new Date(product.date).toLocaleDateString()}
               </p>
+
+              <button
+                type="button"
+                data-testid="product-increase-quantity"
+                onClick={ () => this.increaseCart(product) }
+              >
+                +
+
+              </button>
+              <button
+                type="button"
+                data-testid="product-decrease-quantity"
+                onClick={ () => this.decreaseCart(product) }
+              >
+                -
+
+              </button>
+              <br />
+              <button
+                type="button"
+                data-testid="remove-product"
+                onClick={ () => this.removeCart(product) }
+              >
+                Excluir
+
+              </button>
             </div>
           ))}
-
         </div>
       </div>
     );
